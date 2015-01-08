@@ -42,7 +42,7 @@ test() ->
     run_test(Pid).
 
 start_link() ->
-    [BusId|_R] = dbus_bus:env_to_bus_id(),
+    [BusId|_R] = dbus_bus_connection:env_to_bus_id(),
     start_link(BusId).
 
 start_link(BusId) ->
