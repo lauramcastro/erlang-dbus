@@ -25,6 +25,8 @@
 -define(FIELD_SENDER, 7).
 -define(FIELD_SIGNATURE, 8).
 
+-define(HEADER_MEMBER, 3).
+
 -define(NO_REPLY_EXPECTED, 1).
 -define(NO_AUTO_START, 2).
 
