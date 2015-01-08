@@ -14,7 +14,8 @@
 
 -export([connect/1,
 	 get_object/3,
-	 get_objects_manager/2]).
+	 get_objects_manager/2,
+	 env_to_bus_id/0]).
 
 
 -define(DEFAULT_BUS_SYSTEM, #bus_id{scheme=unix,options=[{path, "/var/run/dbus/system_bus_socket"}]}).
@@ -56,6 +57,11 @@ get_object(#dbus_bus_conn{conn=Conn, bus=DBus}, ServiceName, Path) ->
 get_objects_manager(#dbus_bus_conn{conn=Conn, bus=DBus}, ServiceName) ->
     dbus_proxy:start_link(Conn, ServiceName, <<"/">>, [manager, {bus_proxy, DBus}]).
 
+-spec env_to_bus_id() -> list().
+env_to_bus_id() ->
+    str_to_bus_id(os:getenv(?SESSION_ENV)).
+
+
 %%%
 %%% Priv
 %%%
@@ -64,10 +70,6 @@ get_bus_id(session) ->
     BusId;
 get_bus_id(system) ->
     ?DEFAULT_BUS_SYSTEM.
-
-
-env_to_bus_id() ->
-    str_to_bus_id(os:getenv(?SESSION_ENV)).
 
 str_to_bus_id(Addr) when is_list(Addr) ->
     list_to_bus_id(string:tokens(Addr, [?SERVER_DELIM]), []).
