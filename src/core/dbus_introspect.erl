@@ -126,6 +126,11 @@ find_name(Name, Tree, ToKnownFun) when is_binary(Name) ->
     end.
 
 
+to_binary(Item) when is_atom(Item) ->
+    atom_to_binary(Item, utf8);
+to_binary(Item) when is_list(Item) ->
+    list_to_binary(Item).
+
 to_xmerl(undefined) ->
     [];
 to_xmerl(List) when is_list(List) ->
@@ -133,7 +138,7 @@ to_xmerl(List) when is_list(List) ->
 
 to_xmerl(#dbus_node{}=Elem) ->
     {node,
-     case list_to_binary(Elem#dbus_node.name) of
+     case to_binary(Elem#dbus_node.name) of
 	 undefined ->
 	     [];
 	 Name ->
@@ -145,7 +150,7 @@ to_xmerl(#dbus_node{}=Elem) ->
 
 to_xmerl(#dbus_iface{}=Elem) ->
     {interface,
-     [{name, list_to_binary(Elem#dbus_iface.name)}],
+     [{name, to_binary(Elem#dbus_iface.name)}],
      to_xmerl(Elem#dbus_iface.methods) ++
      to_xmerl(Elem#dbus_iface.signals) ++
      to_xmerl(Elem#dbus_iface.properties)};
@@ -161,7 +166,7 @@ to_xmerl(#dbus_method{}=Elem) ->
 		[to_xmerl(Arg)]
 	end,
     {method,
-     case list_to_binary(Elem#dbus_method.name) of
+     case to_binary(Elem#dbus_method.name) of
 	    undefined ->
 	        [];
 	    Name ->
@@ -190,7 +195,7 @@ to_xmerl(#dbus_signal{}=Elem) ->
 
 to_xmerl(#dbus_arg{}=Elem) ->
     {arg, 
-     case list_to_binary(Elem#dbus_arg.name) of
+     case to_binary(Elem#dbus_arg.name) of
 	    undefined ->
 	        [];
 	    Name ->
